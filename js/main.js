@@ -1,5 +1,9 @@
 var Nakama = {};
-Nakama.configs = {};
+Nakama.configs={
+  bulletSpeed : 1500,
+  shipSpeed : 500,
+};
+
 
 window.onload = function(){
   Nakama.game = new Phaser.Game(640,960,Phaser.AUTO,'',
@@ -25,18 +29,65 @@ var preload = function(){
 
   Nakama.game.load.atlasJSONHash('assets', 'Assets/assets.png', 'Assets/assets.json');
   Nakama.game.load.image('background', 'Assets/Map1.png');
-}
+
+  }
+
 
 // initialize the game
 var create = function(){
   Nakama.game.physics.startSystem(Phaser.Physics.ARCADE);
   Nakama.keyboard = Nakama.game.input.keyboard;
+
+  Nakama.bulletGroup=Nakama.game.add.physicsGroup();
+  Nakama.playerGroup=Nakama.game.add.physicsGroup();
+  Nakama.enemyGroup = Nakama.game.add.physicsGroup();
+
+  Nakama.players=[];
+  Nakama.players.push( new ShipController(200,700,"Spaceship3-Player.png",{
+    up: Phaser.Keyboard.UP,
+    down: Phaser.Keyboard.DOWN,
+    left: Phaser.Keyboard.LEFT,
+    right: Phaser.Keyboard.RIGHT,
+    fire: Phaser.Keyboard.SPACEBAR,
+    cooldown: 0.3
+  }));
+  Nakama.players.push( new ShipController(400,700,"Spaceship3-Partner.png",{
+    up: Phaser.Keyboard.W,
+    down: Phaser.Keyboard.S,
+    left: Phaser.Keyboard.A,
+    right: Phaser.Keyboard.D,
+    fire: Phaser.Keyboard.R,
+    cooldown: 0.3
+  }));
+  //enemies
+    Nakama.enemies = [];
+    Nakama.enemies.push(new EnemyController(
+            250,
+            350,
+            "EnemyType1.png",{}
+        )
+    );
+    Nakama.enemies.push(new EnemyController(
+            400,
+            200,
+            "EnemyType1.png",{}
+        )
+    );
+
+
 }
 
 // update game state each frame
 var update = function(){
 
+
+  for(var i=0; i < Nakama.players.length;i++){
+    Nakama.players[i].update();
+  }
+
 }
 
 // before camera render (mostly for debug)
 var render = function(){}
+//ban dan 5
+//tao classEnemy
