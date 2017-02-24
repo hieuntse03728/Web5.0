@@ -2,7 +2,21 @@ var Nakama = {};
 Nakama.configs = {
   bulletSpeed : 1500,
   shipSpeed   : 500,
-  speedMap : 5
+  speedMap : 5,
+  player1Controls:{
+    up        : Phaser.Keyboard.W,
+    down      : Phaser.Keyboard.S,
+    left      : Phaser.Keyboard.A,
+    right     : Phaser.Keyboard.D,
+    fire      : Phaser.Keyboard.T,
+  },
+  player2Controls:{
+    up        : Phaser.Keyboard.UP,
+    down      : Phaser.Keyboard.DOWN,
+    left      : Phaser.Keyboard.LEFT,
+    right     : Phaser.Keyboard.RIGHT,
+    fire      : Phaser.Keyboard.P,
+  }
 };
 
 window.onload = function(){
@@ -46,15 +60,11 @@ var create = function(){
 
   Nakama.players = [];
   Nakama.players.push(
-    new ShipControllerType1(200,400,{
-      health : 1
-    })
+    new ShipControllerType1(200,400,Nakama.configs.player1Controls)
   );
 
   Nakama.players.push(
-    new ShipControllerType2(400,400,{
-      health : 1
-    })
+    new ShipControllerType2(400,400,Nakama.configs.player2Controls)
   );
 
   Nakama.enemies = [];
@@ -83,14 +93,12 @@ var update = function(){
 
   Nakama.map.tilePosition.y += Nakama.configs.speedMap;
 
-  for(var i=0;i<Nakama.players.length;i++){
-    Nakama.players[i].update();
-  }
-
-  for(var i=0;i<Nakama.enemies.length;i++){
-    Nakama.enemies[i].update();
-  }
-
+  // Nakama.players.forEach(function(player){
+  //   player.update();
+  // });
+  Nakama.enemies.forEach(function(enemy){
+    enemy.update();
+  });
   Nakama.game.physics.arcade.overlap(Nakama.playerBulletGroup, Nakama.enemyGroup, onBulletHitActor);
   Nakama.game.physics.arcade.overlap(Nakama.enemyBulletGroup, Nakama.playerGroup, onBulletHitActor);
 }
